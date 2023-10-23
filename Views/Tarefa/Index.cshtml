@@ -1,0 +1,272 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    //List<ListaDeTarefasMVC.Models.Tarefa> listaTarefas = ViewBag.ListaDeTarefas;
+    List<ListaDeTarefasMVC.Models.TarefaSimples> listaTarefas = ViewBag.ListaDeTarefas;
+    List<ListaDeTarefasMVC.Models.TarefaConcluida> tarefasConcluidas = ViewBag.TarefasConcluidas;
+
+
+}
+
+<style>
+    /*.bx-plus {
+        font-size: 30px;
+        margin-left: 10px;
+        background-color: blueviolet;
+        border-radius: 50%;
+        padding: 5px;
+        color: white;
+    }
+
+    button {
+        width: 10%;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }*/
+
+    .linha-vertical {
+        border-left: 2px solid; /* Adiciona borda esquerda na div como ser fosse uma linha.*/
+        box-sizing: border-box;
+    }
+</style>
+
+<script>
+
+    $(function () {
+        InicializaComponentes();
+    });
+
+    function InicializaComponentes() {
+        carregarCampoData('#data', null, null);
+    }
+
+
+    //$(function () {
+    //    $("#data").datepicker({
+    //        showOn: 'button',
+    //        //buttonImage: 'images/calendar.png',
+    //        //buttonImageOnly: true,
+    //        dateFormat: 'dd/mm/yy',
+    //        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    //        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+    //        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+    //        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    //        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    //        nextText: 'Próximo',
+    //        prevText: 'Anterior'
+    //    });
+    //});
+
+    function ExibirTarefasMarcadas() {
+        var checados = [];
+        $.each($('input[type = "checkbox"]:checked'), function () {
+            checados.push($(this).val());
+        });
+        if (checados == undefined || checados == null || checados.length == 0) {
+            Alerta('Atenção', 'Selecione pelo menos uma atividade para marcar como concluido!')
+        }
+        else {
+            console.log(checados.join(", "));
+            ConfirmaConclusao('Atenção', `Deseja marcar como concluido as atividades: ${checados.join(", ")}`)
+        }
+
+    }
+
+
+    function Alerta(titulo, texto) {
+        $('#dialogJquery').attr('title', titulo);
+        $('#texto').text(texto);
+        $("#dialogJquery").dialog({
+            dialogClass: "no-close",
+            buttons: [
+                {
+                    text: "Ok",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+    }
+
+
+
+    function ExibirCalendario() {
+        $("#datepicker").datepicker();
+    }
+
+    function ExcluirTarefa() {
+
+    }
+
+    function ConfirmaConclusao(titulo, texto) {
+        $('#myModalLabel').text(titulo);
+        $('#myModalText').text(texto);
+        $("#myModal").modal("show");
+    }
+
+    function FecharAlerta() {
+        $('#myModalLabel').text('');
+        $('#myModalText').text('');
+        $("#myModal").modal("hide");
+    }
+
+    function RegistrarTarefaConcluida() {
+        FecharAlerta();
+        var checados = [];
+        $.each($('input[type = "checkbox"]:checked'), function () {
+            checados.push($(this).val());
+        });
+        let nomeTarefa = checados.join(", ");
+        $.ajax({
+            url: '/Home/RegistrarTarefaConcluida',
+            type: 'POST',
+            data: { nomeTarefa: nomeTarefa },
+            success: function (response) {
+                console.log('Resposta do servidor:', response);
+                ExibirTarefasConcluidas();
+                //location.reload();
+            },
+            error: function (error) {
+                console.error('Erro na solicitação:', error);
+            }
+        });
+    }
+
+    function ExibirTarefasConcluidas() {
+        $.ajax({
+            url: '/Tarefa/ExibirTarefasConcluidas',
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (error) {
+                Alerta('Ops...', error);
+            }
+        })
+    }
+
+</script>
+
+<h1>Bem vindo ...</h1>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Lista de tarefas</h2>
+
+        <a href="/Tarefa/NovaTarefa"> <img src="~/assets/adicionar.png" width="30" class="btn-default" /> </a>
+        <button onclick="ExibirTarefasMarcadas()"> <img src="~/assets/verifica.png" width="30" class="btn-default" /> </button>
+
+        <ul id="listaDeTarefas" class="list-group">
+            @{
+                if (listaTarefas == null || listaTarefas.Count == 0)
+                {
+                    <li class="list-group-item">Você ainda não adicionou nenhuma tarefa!</li>
+                }
+                foreach (var tarefa in listaTarefas)
+                {
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="@tarefa.NomeTarefa" aria-label="...">
+                        @tarefa.NomeTarefa
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        @*<div class="linha-vertical"></div>*@
+        <div class="linha-vertical"></div>
+    </div>
+
+    <div class="col-md-4 border-right">
+        <h2>Tarefas concluidas hoje</h2>
+        <table class="list-group">
+            @if (tarefasConcluidas == null || tarefasConcluidas.Count == 0)
+            {
+                <tr>
+                    <td>Nenhuma tarefa foi concluida hoje &#x1F61E</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var tarefaConcluida in tarefasConcluidas)
+                {
+                    <tr class="list-group-item">
+                        <td>@tarefaConcluida.NomeTarefa</td>
+                    </tr>
+                }
+            }
+
+
+        </table>
+
+
+    </div>
+
+    @*<div class="col-md-4">
+            <h1>Lista de Hábitos</h1>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    First checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Second checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Third checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Fourth checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Fifth checkbox
+                </li>
+            </ul>
+        </div>*@
+
+</div>
+
+
+
+<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Abrir modal de demonstração
+</button>*@
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Título do modal</h4>
+            </div>
+            <div class="modal-body">
+                <p id="myModalText"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnFechar" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button id="btnConfirma" type="button" class="btn btn-primary" onclick="RegistrarTarefaConcluida()">Salvar mudanças</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<input id="data" type="text" name="data" />*@
+
+<div id="dialogJquery" title="">
+    <p id="texto">
+
+    </p>
+</div>
+

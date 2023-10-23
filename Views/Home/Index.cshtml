@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    //List<ListaDeTarefasMVC.Models.Tarefa> listaTarefas = ViewBag.ListaDeTarefas;
+    List<ListaDeTarefasMVC.Models.TarefaSimples> listaTarefas = ViewBag.ListaDeTarefas;
+}
+@*<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>*@
+
+@*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+
+
+
+<style>
+    /*.bx-plus {
+        font-size: 30px;
+        margin-left: 10px;
+        background-color: blueviolet;
+        border-radius: 50%;
+        padding: 5px;
+        color: white;
+    }
+
+    button {
+        width: 10%;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }*/
+</style>
+
+<script>
+
+    function SalvarTarefasConcluidas() {
+        //let listaRegistros = $('input[type = "checkbox"]');
+        //console.log(listaRegistros);
+        //let listaRegistrosChecados = $('input[type = "checkbox"]:checked').val();
+        //console.log('Lista de registros checados');
+        //console.log(listaRegistrosChecados);
+
+        var checados = [];
+        $.each($('input[type = "checkbox"]:checked'), function () {
+            checados.push($(this).val());
+        });
+        console.log(checados.join(", "));
+        ConfirmaConclusao('Atenção', `Deseja marcar como concluido as atividades: ${checados.join(", ") }`)
+    }
+
+    function AtividadeFeita() {
+        //let listaRegistrosChecados = $('input[type = "checkbox"]:checked').val();
+        //ConfirmaConclusao('Atenção', `Deseja concluir a atividade: ${listaRegistrosChecados}!`);
+        var checados = [];
+        $.each($("input[name='teste[]']:checked"), function () {
+            checados.push($(this).val());
+        });
+        //ConfirmaConclusao('Atenção', `Deseja concluir a atividade: ${listaRegistrosChecados}!`);
+    }
+
+
+    //function Alerta(titulo, texto) {
+    //    $("#dialog").dialog({
+    //        dialogClass: "no-close",
+    //        buttons: [
+    //            {
+    //                text: "Confirma",
+    //                click: function () {
+    //                    $(this).dialog("close");
+    //                }
+    //            }
+    //        ]
+    //    });
+    //}
+
+    function Teste() {
+        $('#aaa').text('DEU CERTO O JQUERY');
+    }
+
+    function ExibirCalendario() {
+        $("#datepicker").datepicker();
+    }
+
+    function ExcluirTarefa() {
+
+    }
+
+    function ConfirmaConclusao(titulo,texto) {
+        $('#myModalLabel').text(titulo);
+        $('#myModalText').text(texto);
+        $("#myModal").modal("show");
+    }
+
+    /*url: `Handlers/FrmImportadorPFJsonHandler.ashx?tipoConsulta=autorizar-importacao-criticados&registrosSelecionados=${registrosSelecionados}`,*/
+    function RegistrarTarefaConcluida(abc) {
+        //$.ajax({
+        //    url: `/Home/RegistrarTarefaConcluida?nomeTarefa=${nomeTarefa}`,
+        //    method: 'POST',
+        //    success: function (data) {
+        //        // Manipule os dados retornados da rota aqui
+        //        console.log(data);
+        //    },
+        //    error: function (xhr, status, error) {
+        //        // Manipule erros aqui
+        //        console.error(error);
+        //    }
+        //});
+
+        var checados = [];
+        $.each($('input[type = "checkbox"]:checked'), function () {
+            checados.push($(this).val());
+        });
+        let nomeTarefa = checados.join(", ");
+        console.log('Mostrando resultado antes de fazer a requisição');
+        console.log(checados.join(", "));
+        $.ajax({
+            url: '/Home/RegistrarTarefaConcluida',
+            type: 'POST',
+            data: { nomeTarefa: nomeTarefa },
+            success: function (response) {
+                console.log('Resposta do servidor:', response);
+                // Faça algo com a resposta do servidor, se necessário
+            },
+            error: function (error) {
+                console.error('Erro na solicitação:', error);
+            }
+        });
+        console.log('Cheguei no final');
+    }
+
+
+</script>
+
+<h1>Bem vindo ...</h1>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>Lista de tarefas</h1>
+
+        <a href="/Tarefa/NovaTarefa"> <img src="~/assets/adicionar.png" width="30" class="btn-default" /> </a>
+        <button onclick="SalvarTarefasConcluidas()"> <img src="~/assets/verifica.png" width="30" class="btn-default" /> </button>
+
+        <ul id="listaDeTarefas" class="list-group">
+            @{
+                foreach (var tarefa in listaTarefas)
+                {
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="@tarefa.NomeTarefa" aria-label="..." onchange="AtividadeFeita()">
+                        @tarefa.NomeTarefa
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    @*<div class="col-md-4">
+            <h1>Lista de Hábitos</h1>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    First checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Second checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Third checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Fourth checkbox
+                </li>
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+                    Fifth checkbox
+                </li>
+            </ul>
+        </div>*@
+
+    <button onclick="Alerta()" class="btn btn-default"> Clique aqui para exibir um alerta</button>
+    <div id="dialog" title="Basic dialog">
+        <p>
+            This is the default dialog which is useful for displaying information. The dialog window can be moved,
+            resized and closed with the &apos;x&apos; icon.
+        </p>
+    </div>
+
+    <button onclick="Teste()" class="btn btn-default"> Teste</button>
+    <h2 id="aaa"></h2>
+
+    <p>Date: <input type="text" id="datepicker" onclick="ExibirCalendario()"></p>
+
+</div>
+
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Abrir modal de demonstração
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Título do modal</h4>
+            </div>
+            <div class="modal-body">
+                <p id="myModalText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="RegistrarTarefaConcluida()">Salvar mudanças</button>
+            </div>
+        </div>
+    </div>
+</div>
+
