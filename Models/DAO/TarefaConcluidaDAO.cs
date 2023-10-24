@@ -44,7 +44,7 @@ namespace ListaDeTarefasMVC.Models.DAO
                     dbConnection.Open();
 
                     // Consulta SQL usando Dapper
-                    string sql = "DELETE * FROM Tarefas_Simples WHERE nomeTarefa = '" + nomeTarefa + "'; ";
+                    string sql = "DELETE FROM Tarefas_Simples WHERE nomeTarefa = '" + nomeTarefa + "'; ";
                     dbConnection.Query(sql);
                 }
                 return true;

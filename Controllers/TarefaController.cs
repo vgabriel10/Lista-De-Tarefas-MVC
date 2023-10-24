@@ -40,6 +40,7 @@ namespace ListaDeTarefasMVC.Controllers
 
 
                 ViewBag.Message = "Deu certo!";
+                TempData["ok"] = "Tarefa criada com sucesso!";
                 Response.Redirect("/Tarefa/NovaTarefa");
             }
             catch(Exception ex)
@@ -63,7 +64,10 @@ namespace ListaDeTarefasMVC.Controllers
         
         public void ExcluirTarefas(Array tarefas)
         {
-
+            foreach (string tarefa in tarefas)
+            {
+                var registrouTarefa = new TarefaConcluidaDAO().RemoverTarefa(tarefa);
+            }
         }
     }
 }

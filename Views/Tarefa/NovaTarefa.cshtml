@@ -12,6 +12,10 @@
 {
     <div class="alert alert-danger">@TempData["erro"]</div>
 }
+else if(TempData["ok"] != null)
+{
+    <div class="alert alert-success">@TempData["ok"]</div>
+}
 <script>
 
 
@@ -34,7 +38,7 @@
     }
 
     function Alerta(titulo, texto) {
-        $('#dialog').attr('title',titulo);
+        $('#dialog').attr('title', titulo);
         $('#texto').text(texto);
         $("#dialog").dialog({
             dialogClass: "no-close",
@@ -65,7 +69,7 @@
             e.preventDefault();
         }
 
-        
+
         /* Restante da sua função */
         return false;
     }
@@ -88,7 +92,7 @@
     <div class="form-group row">
         <label for="nome" class="col-sm-2 col-form-label">Nome da tarefa:</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" name="nome" placeholder="Insira o nome da tarefa" style="width:200px;" required >
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Insira o nome da tarefa" style="width:200px;" required>
         </div>
 
     </div>
@@ -124,7 +128,7 @@
     <div class="form-group row">
         <label for="data" class="col-sm-2 col-form-label">Previsão de conclusão</label>
         <div class="col-sm-10">
-            <input type="text" id="calendario" name="previsaoConclusao" style="width:200px;"/>
+            <input type="text" id="calendario" name="previsaoConclusao" style="width:200px;" />
         </div>
 
     </div>

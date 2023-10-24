@@ -120,7 +120,7 @@
         });
         let nomeTarefa = checados.join(", ");
         $.ajax({
-            url: '/Home/RegistrarTarefaConcluida',
+            url: '/Tarefa/RegistrarTarefaConcluida',
             type: 'POST',
             data: { nomeTarefa: nomeTarefa },
             success: function (response) {
@@ -184,19 +184,25 @@
 
     <div class="col-md-4 border-right">
         <h2>Tarefas concluidas hoje</h2>
-        <table class="list-group">
+        <table class="table">
             @if (tarefasConcluidas == null || tarefasConcluidas.Count == 0)
             {
                 <tr>
                     <td>Nenhuma tarefa foi concluida hoje &#x1F61E</td>
+                    <td></td>
                 </tr>
             }
             else
             {
+        <tr>
+            <td>Tarefa</td>
+            <td>Data de conclusão</td>
+        </tr>
                 foreach (var tarefaConcluida in tarefasConcluidas)
                 {
-                    <tr class="list-group-item">
+                    <tr>
                         <td>@tarefaConcluida.NomeTarefa</td>
+                        <td>@tarefaConcluida.DataConclusao</td>
                     </tr>
                 }
             }
