@@ -23,7 +23,7 @@ namespace ListaDeTarefasMVC.Models.DAO
                 dbConnection.Open();
 
                 // Consulta SQL usando Dapper
-                string sql = "SELECT * FROM Tarefas_Concluidas WHERE DataConclusao = '"+ dataAtualFormatada + "'";
+                string sql = "SELECT * FROM Tarefas_Concluidas WHERE DataConclusao BETWEEN '" + dataAtualFormatada + " 00:00:00' AND '" + dataAtualFormatada + " 23:59:59';";
                 var resultado = dbConnection.Query<TarefaConcluida>(sql);
 
                 foreach (var tarefa in resultado)
@@ -44,7 +44,7 @@ namespace ListaDeTarefasMVC.Models.DAO
                     dbConnection.Open();
 
                     // Consulta SQL usando Dapper
-                    string sql = "DELETE FROM Tarefas_Simples WHERE nomeTarefa = '" + nomeTarefa + "'; ";
+                    string sql = "DELETE FROM Tarefas_Simples WHERE nomeTarefa = '" + nomeTarefa.Trim() + "'; ";
                     dbConnection.Query(sql);
                 }
                 return true;
@@ -58,7 +58,7 @@ namespace ListaDeTarefasMVC.Models.DAO
         public bool RegistrarTarefaConcluida(string nomeTarefa)
         {
             DateTime dataAtual = DateTime.Now;
-            string dataAtualFormatada = dataAtual.ToString("yyyy/MM/dd");
+            string dataAtualFormatada = dataAtual.ToString("yyyy/MM/dd HH:mm:ss");
             try
             {
                 using (IDbConnection dbConnection = new SqlConnection(connectionString))
@@ -66,7 +66,7 @@ namespace ListaDeTarefasMVC.Models.DAO
                     dbConnection.Open();
 
                     // Consulta SQL usando Dapper
-                    string sql = "INSERT INTO Tarefas_Concluidas (NomeTarefa,DataConclusao) VALUES ('"+nomeTarefa+"','"+ dataAtualFormatada + "')";
+                    string sql = "INSERT INTO Tarefas_Concluidas (NomeTarefa,DataConclusao) VALUES ('" + nomeTarefa.Trim() + "','"+ dataAtualFormatada + "');";
                     dbConnection.Query(sql);
 
                 }

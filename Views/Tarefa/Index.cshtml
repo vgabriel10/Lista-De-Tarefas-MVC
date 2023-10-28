@@ -126,7 +126,7 @@
             success: function (response) {
                 console.log('Resposta do servidor:', response);
                 ExibirTarefasConcluidas();
-                //location.reload();
+                AtualizaTela();
             },
             error: function (error) {
                 console.error('Erro na solicitação:', error);
@@ -147,107 +147,68 @@
         })
     }
 
+    function AtualizaTela() {
+        //$.ajax({
+        //    url: '/Tarefa/ListaDeTarefas',
+        //    type: 'GET',
+        //    success: function (result) {
+        //        $('partialViewListaDeTarefas').html(result);
+        //    },
+        //    error: function (error) {
+        //        Alerta('Erro', error);
+        //    }
+        //    })
+
+        //$('#partialViewListaDeTarefas').load('/Tarefa/ListaDeTarefas', function (response, status, xhr) {
+        //    if (status == "success") {
+        //        alert("External content loaded successfully!");
+        //        $('#partialViewListaDeTarefasConcluidasHoje').load('/Tarefa/ListaDeTarefasConcluidasHoje', function (response, status, xhr) {
+        //            console.log(status);
+        //        });
+        //    }
+
+        //    if (status == "error")
+        //        alert("Error: " + xhr.status + ": " + xhr.statusText);
+        //});
+
+        //$.get('/Controlador/Acao2', function (data) {
+        //    // Atualizar a segunda div com o conteúdo da segunda Partial View
+        //    $('#partialView2Container').html(data);
+        //});
+
+        $('#partialViewListaDeTarefas').load('/Tarefa/ListaDeTarefas');
+        $('#partialViewListaDeTarefasConcluidasHoje').load('/Tarefa/ListaDeTarefasConcluidasHoje');
+    }
+
 </script>
 
 <h1>Bem vindo ...</h1>
 
 
-
 <div class="row">
-    <div class="col-md-4">
-        <h2>Lista de tarefas</h2>
-
-        <a href="/Tarefa/NovaTarefa"> <img src="~/assets/adicionar.png" width="30" class="btn-default" /> </a>
-        <button onclick="ExibirTarefasMarcadas()"> <img src="~/assets/verifica.png" width="30" class="btn-default" /> </button>
-
-        <ul id="listaDeTarefas" class="list-group">
-            @{
-                if (listaTarefas == null || listaTarefas.Count == 0)
-                {
-                    <li class="list-group-item">Você ainda não adicionou nenhuma tarefa!</li>
-                }
-                foreach (var tarefa in listaTarefas)
-                {
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="@tarefa.NomeTarefa" aria-label="...">
-                        @tarefa.NomeTarefa
-                    </li>
-                }
-            }
-        </ul>
+    <div id="partialViewListaDeTarefas" class="col-md-5">
+        @Html.Partial("_ListaDeTarefas")
     </div>
 
-    <div class="col-md-4">
-        @*<div class="linha-vertical"></div>*@
+
+    <div class="col-md-2">
         <div class="linha-vertical"></div>
     </div>
 
-    <div class="col-md-4 border-right">
-        <h2>Tarefas concluidas hoje</h2>
-        <table class="table">
-            @if (tarefasConcluidas == null || tarefasConcluidas.Count == 0)
-            {
-                <tr>
-                    <td>Nenhuma tarefa foi concluida hoje &#x1F61E</td>
-                    <td></td>
-                </tr>
-            }
-            else
-            {
-        <tr>
-            <td>Tarefa</td>
-            <td>Data de conclusão</td>
-        </tr>
-                foreach (var tarefaConcluida in tarefasConcluidas)
-                {
-                    <tr>
-                        <td>@tarefaConcluida.NomeTarefa</td>
-                        <td>@tarefaConcluida.DataConclusao</td>
-                    </tr>
-                }
-            }
 
 
-        </table>
-
-
+    @*<h2>Tarefas concluidas hoje</h2>*@
+    <div id="partialViewListaDeTarefasConcluidasHoje" class="col-md-5">
+        @Html.Partial("_ListaDeTarefasConcluidasHoje")
     </div>
-
-    @*<div class="col-md-4">
-            <h1>Lista de Hábitos</h1>
-
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                    First checkbox
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                    Second checkbox
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                    Third checkbox
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                    Fourth checkbox
-                </li>
-                <li class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-                    Fifth checkbox
-                </li>
-            </ul>
-        </div>*@
-
 </div>
 
 
 
 <!-- Button trigger modal -->
 @*<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-    Abrir modal de demonstração
-</button>*@
+        Abrir modal de demonstração
+    </button>*@
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -268,7 +229,6 @@
     </div>
 </div>
 
-@*<input id="data" type="text" name="data" />*@
 
 <div id="dialogJquery" title="">
     <p id="texto">

@@ -210,6 +210,8 @@
     <Content Include="Views\Tarefa\Index.cshtml" />
     <Content Include="Views\Tarefa\NovaTarefa.cshtml" />
     <Content Include="Scripts\package.json" />
+    <Content Include="Views\Tarefa\_ListaDeTarefas.cshtml" />
+    <Content Include="Views\Tarefa\_ListaDeTarefasConcluidasHoje.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

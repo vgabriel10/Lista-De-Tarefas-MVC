@@ -1,0 +1,33 @@
+﻿
+@{
+    List<ListaDeTarefasMVC.Models.TarefaConcluida> tarefasConcluidas = ViewBag.TarefasConcluidas;
+}
+
+
+<h2>Tarefas concluidas hoje</h2>
+<table class="table">
+    @if (tarefasConcluidas == null || tarefasConcluidas.Count == 0)
+    {
+        <tr>
+            <td>Nenhuma tarefa foi concluida hoje &#x1F61E</td>
+            <td></td>
+            <td></td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td></td>
+            <td>Tarefa</td>
+            <td>Data de conclusão</td>
+        </tr>
+        foreach (var tarefaConcluida in tarefasConcluidas)
+        {
+            <tr>
+                <td>&#x2705</td>
+                <td>@tarefaConcluida.NomeTarefa</td>
+                <td>@tarefaConcluida.DataConclusao</td>
+            </tr>
+        }
+    }
+</table>

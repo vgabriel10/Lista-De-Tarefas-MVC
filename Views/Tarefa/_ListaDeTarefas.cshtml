@@ -1,0 +1,28 @@
+﻿@*<h1>EU SOU UMA PARTIAL VIEW</h1>*@
+
+@{
+    List<ListaDeTarefasMVC.Models.TarefaSimples> listaTarefas = ViewBag.ListaDeTarefas;
+}
+
+
+
+<h2>Lista de tarefas</h2>
+
+<a href="/Tarefa/NovaTarefa"> <img src="~/assets/adicionar.png" width="30" class="btn-default" /> </a>
+<button onclick="ExibirTarefasMarcadas()"> <img src="~/assets/verifica.png" width="30" class="btn-default" /> </button>
+
+<ul id="listaDeTarefas" class="list-group">
+    @{
+        if (listaTarefas == null || listaTarefas.Count == 0)
+        {
+            <li class="list-group-item">Você ainda não adicionou nenhuma tarefa!</li>
+        }
+        foreach (var tarefa in listaTarefas)
+        {
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" value="@tarefa.NomeTarefa" aria-label="...">
+                @tarefa.NomeTarefa
+            </li>
+        }
+    }
+</ul>

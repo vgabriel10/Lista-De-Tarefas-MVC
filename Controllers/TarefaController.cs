@@ -20,6 +20,22 @@ namespace ListaDeTarefasMVC.Controllers
             return View();
         }
 
+        public ActionResult ListaDeTarefas()
+        {
+            var listaTarefas = new TarefaSimplesDAO().ListaDeTarefas();
+            ViewBag.ListaDeTarefas = listaTarefas;
+
+            return PartialView("_ListaDeTarefas", listaTarefas);
+        }
+
+        public ActionResult ListaDeTarefasConcluidasHoje()
+        {
+            var tarefasConcluidas = new TarefaConcluidaDAO().TarefasConcluidas();
+            ViewBag.TarefasConcluidas = tarefasConcluidas;
+
+            return PartialView("_ListaDeTarefasConcluidasHoje", tarefasConcluidas);
+        }
+
         public void ExibirTarefasConcluidas()
         {
             var tarefasConcluidas = new TarefaConcluidaDAO().TarefasConcluidas();
