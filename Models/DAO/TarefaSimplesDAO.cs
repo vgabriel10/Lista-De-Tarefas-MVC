@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Dapper;
+using System.Globalization;
 
 namespace ListaDeTarefasMVC.Models.DAO
 {
@@ -57,10 +58,38 @@ namespace ListaDeTarefasMVC.Models.DAO
         {
             try
             {
+                DateTime? previsaoConclusaoConvertida = null;
+                string dataFormatada = string.Empty;
+                string formatoEntrada = "dd/MM/yyyy";
+                if (previsaoConclusao != string.Empty)
+                {
+                    try
+                    {
+                        //var dia = int.Parse(previsaoConclusao.Substring(0, 2));
+                        //var mes = int.Parse(previsaoConclusao.Substring(3, 2));
+                        //var ano = int.Parse(previsaoConclusao.Substring(6, 4));
+                        //previsaoConclusaoConvertida = new DateTime(ano, mes, dia);
+
+                        var dia = previsaoConclusao.Substring(0, 2);
+                        var mes = previsaoConclusao.Substring(3, 2);
+                        var ano = previsaoConclusao.Substring(6, 4);
+                        dataFormatada = string.Concat(ano,"/",mes,"/",dia);
+                        DateTime dataTeste = DateTime.ParseExact(dataFormatada, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+
+                        
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Data inválida!");
+                    }
+                    
+                    //previsaoConclusao = DateTime.ParseExact(previsaoConclusao, formatoEntrada, System.Globalization.CultureInfo.InvariantCulture);
+                }
                 using (IDbConnection dbConnection = new SqlConnection(connectionString))
                 {
                     dbConnection.Open();
-                    string sql = "INSERT INTO Tarefas_Simples (nomeTarefa,prioridade,previsaoConclusao) VALUES ('"+ nomeTarefa + "',"+ prioridade + ",'"+ previsaoConclusao + "')";
+                    string sql = "INSERT INTO Tarefas_Simples (nomeTarefa,prioridade,previsaoConclusao) VALUES ('"+ nomeTarefa + "',"+ prioridade + ",'"+ dataFormatada + "')";
                     dbConnection.Query(sql);
                 }
                 return true;
@@ -77,7 +106,7 @@ namespace ListaDeTarefasMVC.Models.DAO
             }
             catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
     }

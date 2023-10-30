@@ -29,6 +29,7 @@ else if(TempData["ok"] != null)
 
     function InicializaComponentes() {
         carregarCampoData('#calendario', null, null);
+        $('#calendario').mask('99/99/9999');
     }
 
     function Calendario() {
@@ -53,12 +54,6 @@ else if(TempData["ok"] != null)
         });
     }
 
-    //function ValidarDados() {
-    //    let nome = $('#nome').val();
-    //    if (nome.trim() == '') {
-    //        Alerta('Atenção','Não é possível adicionar uma tarefa sem nome!')
-    //    }
-    //}
 
     //Evento que é chamado quando um submit é acionado
     function ValidarDados(e) {
@@ -68,11 +63,12 @@ else if(TempData["ok"] != null)
             Alerta('Atenção', 'Não é possível adicionar uma tarefa sem nome!')
             e.preventDefault();
         }
-
-
         /* Restante da sua função */
         return false;
     }
+
+
+
 </script>
 
 <div>
@@ -128,7 +124,7 @@ else if(TempData["ok"] != null)
     <div class="form-group row">
         <label for="data" class="col-sm-2 col-form-label">Previsão de conclusão</label>
         <div class="col-sm-10">
-            <input type="text" id="calendario" name="previsaoConclusao" style="width:200px;" />
+            <input type="text" id="calendario" name="previsaoConclusao" style="width:200px;" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$"/>
         </div>
 
     </div>

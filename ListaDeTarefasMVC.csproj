@@ -186,6 +186,7 @@
     <Content Include="Scripts\jquery-ui.structure.min.css" />
     <Content Include="Scripts\jquery-ui.theme.css" />
     <Content Include="Scripts\jquery-ui.theme.min.css" />
+    <Content Include="Scripts\jquery.mask.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
